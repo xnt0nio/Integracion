@@ -1,104 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Ferremax Productos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        header {
-            background-color: #000066; /* Azul oscuro */
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-        nav {
-            background-color: #000099; /* Azul */
-            color: white;
-            padding: 5px 0;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            text-align: center;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        .product-grid {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        .product {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        footer {
-            background-color: #000066; /* Azul oscuro */
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>FERREMAX</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Productos</a></li>
-            <li><a href="#">Servicios</a></li>
-            <li><a href="#">Contacto</a></li>
-        </ul>
-    </nav>
-    <div class="container">
-        <h2>Productos</h2>
-        <div class="product-grid">
-            <div class="product">
-                <img src="pinza.jpg" alt="Pinza">
-                <p>Pinza</p>
-            </div>
-            <div class="product">
-                <img src="martillo.jpg" alt="Martillo">
-                <p>Martillo</p>
-            </div>
-            <div class="product">
-                <img src="taladro.jpg" alt="Taladro">
-                <p>Taladro</p>
-            </div>
-            <div class="product">
-                <img src="ladrillo.jpg" alt="Ladrillo">
-                <p>Ladrillo</p>
-            </div>
-            <div class="product">
-                <img src="cemento.jpg" alt="Cemento">
-                <p>Cemento</p>
-            </div>
-            <div class="product">
-                <img src="sierra.jpg" alt="Sierra">
-                <p>Sierra</p>
-            </div>
-        </div>
-    </div>
-    <footer>
-        <p>Derechos reservados © 2024 Ferremax</p>
-    </footer>
-</body>
-</html>
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
