@@ -1,0 +1,33 @@
+
+
+.boton-ferreteria {
+    background-color: #0000FF; /* Color de fondo azul */
+    color: #FFFFFF; /* Texto en color blanco */
+    padding: 40px 50px; /* Espaciado interno para dar tamaño al botón */
+    border-radius: 50px; /* Bordes redondeados */
+    border: none; /* Sin borde */
+    text-align: center; /* Texto centrado */
+    font-size: 1.5em; /* Tamaño del texto */
+    font-weight: bold; /* Texto en negrita */
+    font-family: Arial, sans-serif; /* Tipo de letra */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera para efecto 3D */
+    cursor: pointer; /* Cursor en forma de mano al pasar sobre el botón */
+    margin-right: 100px; /* Margen a la derecha para separar los botones */
+    /* Ajusta el margen a cero para el último botón */
+    transition: background-color 0.3s; /* Transición suave del color de fondo al hacer hover */
+    display: inline-block; /* Esto hace que los botones se muestren en línea */
+}
+
+.boton-ferreteria:last-child {
+    margin-right: 0; /* Asegura que no haya margen extra después del último botón */
+}
+
+.boton-ferreteria:hover {
+    background-color: #0000CC; /* Color de fondo un poco más oscuro al hacer hover */
+}
+
+/* Asegúrate de que la clase .row no tenga estilos que interfieran con el layout horizontal */
+.row {
+    display: flex; /* Esto alinea los elementos horizontalmente */
+    justify-content: flex-start; /* Esto alinea los elementos al inicio de la fila */
+}
