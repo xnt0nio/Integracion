@@ -31,3 +31,10 @@
     display: flex; /* Esto alinea los elementos horizontalmente */
     justify-content: flex-start; /* Esto alinea los elementos al inicio de la fila */
 }
+
+
+.product-section {
+    margin-bottom: 1500px; /* Ajusta este valor para incrementar el espacio */
+}
+
+
