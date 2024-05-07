@@ -27,6 +27,8 @@ def carrito(request):
     return render(request, 'core/carrito.html')
 
 
+def checkout(request):
+    return render(request, 'core/checkout.html')
 
 def envio(request):
     return render(request, 'core/envio.html')

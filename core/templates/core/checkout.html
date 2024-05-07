@@ -1,3 +1,12 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -253,7 +262,9 @@
 								</tr>
 							</tbody>
 						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
+						
+						<a href="#" id="checkout-btn"  class="boxed-btn">Place Order</a>
+						<div id="wallet_container"></div>
 					</div>
 				</div>
 			</div>
@@ -384,3 +395,14 @@
 
 </body>
 </html>
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
