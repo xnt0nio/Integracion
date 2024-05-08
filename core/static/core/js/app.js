@@ -8,11 +8,11 @@ document.getElementById("checkout-btn").addEventListener("click",async () =>{
 
         const orderData = {
             title: "producto",
-            quanty: 1,
+            quantity: 1,
             price: 10,
         };
     
-        const response  = await  fetch("http://localhost:3000/create_preference", {
+        const response  = await  fetch("http://localhost:8000/create_preference", {
             method: "POST",
             headers: {
                 "content-Type": "application/json",
