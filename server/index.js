@@ -5,7 +5,7 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 
 
-const client = new MercadoPagoConfig({ accessToken: 'YOUR_ACCESS_TOKEN' });
+const client = new MercadoPagoConfig({ accessToken: 'TEST-7400591541742198-050923-6fedd8b527f928b3112f0b3b4ae84957-1451079063' });
 
 
 const app = express()

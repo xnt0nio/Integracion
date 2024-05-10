@@ -1,4 +1,8 @@
-const mp = new MercadoPago('YOUR_PUBLIC_KEY', {
+
+
+
+
+const mp = new MercadoPago('TEST-99b079b4-d97b-4ea4-bf60-23112846af0a', {
     locale: "es-CH",
 });
 
