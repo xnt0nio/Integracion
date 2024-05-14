@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express());
 
 app.get("/", (req, res) => {
-    res.send("hola hola")
+    res.send("hola hojjla")
 });
 
 app.post("/create_preference", async (req, res) => {
