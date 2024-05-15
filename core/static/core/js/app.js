@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const orderData = {
                 title: "producto",
                 quantity: 1,
-                price: 10,
+                price: 1,
             };
 
             console.log("Sending order data:", orderData); // Log los datos que se envían
