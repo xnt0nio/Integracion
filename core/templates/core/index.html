@@ -50,10 +50,10 @@
     <div class="list-section pt-150 pb-80">
         <div class="container">
             <div class="row">            
-                <button class="boton-ferreteria">Ferretería</button>
-                <button class="boton-ferreteria">Herramientas</button>
-                <button class="boton-ferreteria">Maderas</button>
-                <button class="boton-ferreteria">Pinturas</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Ferretería</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Herramientas</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Maderas</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Pinturas</button>
             </div>
         </div>
     </div>
@@ -63,13 +63,13 @@
 
 
 
-    <section class="shop-banner">
-        <div class="container">
-            <h3>December sale is on! <br> with big <span class="orange-text">Discount...</span></h3>
-            <div class="sale-percent"><span> <br> </span>50% <span></span></div>
-            <a href="shop.html" class="cart-btn btn-lg">Shop Now</a>
+    <section class="shop-banner" style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <h3>TENEMOS TODO <br> LO QUE BUSCAS!</h3>
+            <a href="{% url 'productos' %}" class="cart-btn btn-lg">Ver productos</a>
         </div>
     </section>
+    
 
 
 
@@ -78,9 +78,8 @@
             <div class="row">
                 <div class="col-lg-8 offset-lg-2 text-center">
                     <div class="section-title">
-                        <h3><span class="orange-text">Our</span> Products</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
-                            beatae optio.</p>
+                        <h3><span class="orange-text"></span> Algunos de nuestros productos</h3>
+                
                     </div>
                 </div>
             </div>
@@ -89,33 +88,14 @@
                 <div class="col-lg-4 col-md-6 text-center">
                     <div class="single-product-item">
                         <div class="product-image">
-                            <a href="single-product.html"><img src="assets/img/products/product-img-1.jpg" alt=""></a>
+                            <a href="single-product.html"><img src="{% static 'core/img/products/product-img-1.jpg' %}" alt=""></a>
                         </div>
                         <h3>Strawberry</h3>
                         <p class="product-price"><span>Per Kg</span> 85$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        <a href="{% url 'descripcion' %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Ver producto</a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html"><img src="assets/img/products/product-img-2.jpg" alt=""></a>
-                        </div>
-                        <h3>Berry</h3>
-                        <p class="product-price"><span>Per Kg</span> 70$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
-                            <a href="single-product.html"><img src="assets/img/products/product-img-3.jpg" alt=""></a>
-                        </div>
-                        <h3>Lemon</h3>
-                        <p class="product-price"><span>Per Kg</span> 35$ </p>
-                        <a href="cart.html" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-                    </div>
-                </div>
+               
 
           
             </div>
