@@ -18,7 +18,7 @@ class ProductoAdmin(admin.ModelAdmin):
 #    list_per_page = 10
 #    list_editable =  ['precio_producto','cantidad_agregada']
 
-#admin.site.register(TipoProducto)
-#admin.site.register(Producto,ProductoAdmin)
+admin.site.register(TipoProducto)
+admin.site.register(Producto,ProductoAdmin)
 #admin.site.register(Seguimiento,seguimientoAdmin)
 #admin.site.register(Carrito)

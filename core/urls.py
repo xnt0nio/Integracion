@@ -1,4 +1,4 @@
-from django import views
+from django import views,forms
 from django.urls import path, include
 from .views import *
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('envio', envio , name="envio"),
     path('estadisticas', estadisticas , name="estadisticas"),
     path('checkout', checkout , name="checkout"),
+    path('add/', add, name="add"),
 ]
