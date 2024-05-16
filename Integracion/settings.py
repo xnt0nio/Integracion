@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
+from pathlib import Path,os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,3 +122,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CONFIGURANDO LA CARPETA PARA LAS IMAGENES
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# CONFIGURANDO EL SISTEMA DE MENSAJERIA DE DJANGO
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
+# CONFIGURANDO RUTA DEL LOGIN
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
