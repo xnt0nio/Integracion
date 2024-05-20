@@ -14,4 +14,5 @@ urlpatterns = [
     path('estadisticas', estadisticas , name="estadisticas"),
     path('checkout', checkout , name="checkout"),
     path('add/', add, name="add"),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
