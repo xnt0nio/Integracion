@@ -19,14 +19,14 @@
         <div class="row">
             <div class="col-md-5">
                 <div class="single-product-img">
-                    <img src=" {% static 'core/img/products/product-img-5.jpg' %}" alt="">
+                    <img src=" {{ Productos.imagen.url }}" alt="">
                 </div>
             </div>
             <div class="col-md-7">
                 <div class="single-product-content">
-                    <h3>Green apples have polyphenols</h3>
-                    <p class="single-product-pricing"><span>Per Kg</span> $50</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta sint dignissimos, rem commodi cum voluptatem quae reprehenderit repudiandae ea tempora incidunt ipsa, quisquam animi perferendis eos eum modi! Tempora, earum.</p>
+                    <h3>{{ Productos.nombre }}</h3>
+                    <p class="single-product-pricing"> ${{ Productos.precio }}</p>
+                    <p>{{ Productos.descripcion }}</p>
                     <div class="single-product-form">
                         <form action="index.html">
                             <input type="number" placeholder="0">

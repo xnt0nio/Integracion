@@ -17,3 +17,20 @@ class ProductoForm(ModelForm):
     precio = forms.IntegerField(min_value=1,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Precio"}))
     stock = forms.IntegerField(min_value=0,widget=forms.NumberInput(attrs={"placeholder":"Ingrese Stock"}))
     descripcion = forms.CharField(min_length=10,max_length=250,widget=forms.Textarea(attrs={"rows":4}))
+
+
+    
+    class Meta:
+        model = Producto
+        fields = '__all__'
+
+        widgets = {
+            'vencimiento' : forms.DateInput(attrs={'type': 'date'})
+        }
+
+
+class CustomUserCreationForm(UserCreationForm):
+    
+    class Meta:
+        model = User
+        fields = ['username', "first_name", "last_name", "email", "password1", "password2"]
