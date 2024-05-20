@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -23,3 +24,11 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+class Carrito(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad_agregada = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'db_carrito'

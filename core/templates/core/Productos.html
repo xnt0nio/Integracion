@@ -3,46 +3,39 @@
 {% block css %}
 {% endblock %}
 {% block contenido %}
-
-
-
-
-
-
-<div class="product-section mt-150 mb-150"  style="margin-bottom: 400px;">
+<div class="product-section mt-150 mb-150" style="margin-bottom: 400px;">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2 text-center">
                 <div class="section-title">
                     <h3><span class="orange-text">Our</span> Products</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
-                        beatae optio.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-4 col-md-6 text-center">
-
-
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <a href="{% url 'descripcion' %}"><img src="{% static 'core/img/products/product-img-1.jpg' %}" alt=""></a>
+            {% for aux in listado %}
+                <div class="col-lg-4 col-md-6 text-center">
+                    <div class="single-product-item">
+                        <div class="product-image">
+                            <a href="{% url 'descripcion' aux.id %}">
+                                {% if aux.imagen %}
+                                    <img src="{{ aux.imagen.url }}" alt="{{ aux.nombre }}">
+                                {% else %}
+                                    <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="{{ aux.nombre }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <h3>{{ aux.nombre }}</h3>
+                        <p class="product-price"><span>Per Kg</span> ${{ aux.precio }}</p>
+                        <a href="{% url 'descripcion' aux.id %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                     </div>
-                    <h3>Strawberry</h3>
-                    <p class="product-price"><span>Per Kg</span> 85$ </p>
-                    <a  href="{% url 'descripcion' %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
                 </div>
-            </div>
-      
-       
-
-      
+            {% endfor %}
         </div>
     </div>
 </div>
-
-
 {% endblock %}
 {% block js %}
 {% endblock %}
