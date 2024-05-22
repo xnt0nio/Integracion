@@ -86,25 +86,29 @@ def descripcion(request, id):
 
 
 def carrito(request):
-    carrito = Carrito.objects.filter(usuario=request.user)
+    carrito_items = Carrito.objects.filter(usuario=request.user)
     total_precio = 0
-    valor = Carrito.producto
 
+    productos_en_carrito = []
 
-    for item in carrito:
-        item.total_producto = item.producto.precio * item.cantidad_agregada
-        total_precio += item.total_producto
-
-
+    for item in carrito_items:
+        subtotal_producto = item.producto.precio * item.cantidad_agregada
+        total_precio += subtotal_producto
         
-       
+        productos_en_carrito.append({
+            'producto': item.producto,
+            'cantidad_agregada': item.cantidad_agregada,
+            'total_producto': subtotal_producto,
+            'valor': item.producto.precio  
+        })
 
     datos = {
-        'listarproductos': carrito,
-        'total_precio': total_precio,
-        'valor' : valor, 
+        'listarproductos': productos_en_carrito,
+        'total_precio': total_precio
     }
     return render(request, 'core/carrito.html', datos)
+
+
 
 
 def checkout(request):
