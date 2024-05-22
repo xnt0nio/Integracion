@@ -32,7 +32,7 @@
                         <tbody>
                             {% for aux in listarproductos %}
                             <tr class="table-body-row">
-                                <td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
+                                <td class="product-remove"><i class="far fa-window-close" onclick="eliminar_producto({{ aux.id }})" ></i></td>
                                 <td class="product-image"><img src="{{ aux.producto.imagen.url }}" alt=""></td>
                                 <td class="product-name">{{ aux.producto.nombre }}</td>
                                 <td class="product-price">${{ aux.valor}}</td>                             

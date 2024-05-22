@@ -15,4 +15,5 @@ urlpatterns = [
     path('checkout', checkout , name="checkout"),
     path('add/', add, name="add"),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('eliminar_producto/<id>/', eliminar_producto, name="eliminar_producto"),
 ]

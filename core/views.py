@@ -152,3 +152,15 @@ def registro(request):
             return redirect(to="index")
         data["form"] = formulario    
     return render(request, 'registration/registro.html',data)
+
+
+def eliminar_producto(request, id):
+    carro = Carrito.objects.get(id=id)
+    producto = carro.producto
+
+    # Sumar la cantidad del carrito al stock del producto
+    producto.stock += carro.cantidad_agregada
+    producto.save()
+
+    carro.delete()
+    return redirect("carrito")
