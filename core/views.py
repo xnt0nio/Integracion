@@ -7,7 +7,8 @@ from .forms import *
 from .models import *
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login
-
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404
 
 
 
@@ -48,56 +49,62 @@ def productos(request):
 
 
 
-def descripcion(request,id):
-    producto = Producto.objects.get(id=id)
 
+
+def descripcion(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    
     if request.method == 'POST':
-        cantidad_agregada = int(request.POST.get('cantidad_agregada', 1))
+        try:
+            cantidad_agregada = int(request.POST.get('cantidad_agregada', 1))
+        except ValueError:
+            messages.error(request, "Por favor, introduce una cantidad válida.")
+            return render(request, 'core/descripcion.html', {'Productos': producto})
+        
+        if cantidad_agregada < 1:
+            messages.error(request, "La cantidad debe ser al menos 1.")
+            return render(request, 'core/descripcion.html', {'Productos': producto})
 
-        # Verificar si hay suficiente stock disponible
         if producto.stock >= cantidad_agregada:
-            # Obtener el carrito del usuario actual
-            carrito, created = Carrito.objects.get_or_create(usuario=request.user, producto=producto)
-
-            # Actualizar la cantidad agregada en el carrito
+            carrito, created = Carrito.objects.get_or_create(usuario=request.user, producto=producto, defaults={'cantidad_agregada': 0})
+            
             carrito.cantidad_agregada += cantidad_agregada
+          
             carrito.save()
 
-            # Restar la cantidad del carrito al stock del producto
             producto.stock -= cantidad_agregada
+            producto.precio
             producto.save()
-        
-            messages.success(request, "Producto almacenado correctamente")
+
+            messages.success(request, "Producto agregado correctamente al carrito")
         else:
             messages.error(request, "No hay suficiente stock disponible")
 
-    data = {'Productos': producto}
-    return render(request, 'core/descripcion.html',data)
+    return render(request, 'core/descripcion.html', {'Productos': producto})
+
+
 
 
 def carrito(request):
     carrito = Carrito.objects.filter(usuario=request.user)
     total_precio = 0
+    valor = Carrito.producto
+
 
     for item in carrito:
         item.total_producto = item.producto.precio * item.cantidad_agregada
         total_precio += item.total_producto
 
-    descuento = Decimal('0.0')
-    total_con_descuento = total_precio
-    if hasattr(request.user, 'suscripcion'):
-            descuento_porcentaje = Decimal('0.1')
-            descuento = round(total_precio * descuento_porcentaje)
-            total_con_descuento = round(total_precio - descuento)    
+
+        
+       
 
     datos = {
         'listarproductos': carrito,
         'total_precio': total_precio,
-        'descuento': descuento,
-        'total_con_descuento': total_con_descuento,
-        'suscrito': hasattr(request.user, 'suscripcion')
+        'valor' : valor, 
     }
-    return render(request, 'core/carrito.html',datos)
+    return render(request, 'core/carrito.html', datos)
 
 
 def checkout(request):

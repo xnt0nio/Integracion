@@ -35,10 +35,11 @@
                                 <td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
                                 <td class="product-image"><img src="{{ aux.producto.imagen.url }}" alt=""></td>
                                 <td class="product-name">{{ aux.producto.nombre }}</td>
-                                <td class="product-price">$85</td>
-                                <input type="number" value="{{ aux.cantidad_agregada }}" min="1" name="cantidad_agregada">
+                                <td class="product-price">${{ aux.valor}}</td>                             
+                                <td class="product-total">{{ aux.cantidad_agregada }}</td>
                                 <td class="product-total">${{ aux.total_producto }}</td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

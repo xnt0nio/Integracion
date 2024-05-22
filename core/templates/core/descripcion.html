@@ -28,10 +28,27 @@
                     <p class="single-product-pricing"> ${{ Productos.precio }}</p>
                     <p>{{ Productos.descripcion }}</p>
                     <div class="single-product-form">
-                        <form action="index.html">
-                            <input type="number" placeholder="0">
+                        <!-- Formulario con campo de cantidad visible -->
+                        <!-- Formulario con campo de cantidad visible y con valor predeterminado -->
+                        <form id="product-form" action="{% url 'descripcion' Productos.id %}" method="post"
+                            style="display:inline;">
+                            {% csrf_token %}
+                            <!-- Campo de cantidad con valor predeterminado a 1 -->
+                            <input type="number" name="cantidad_agregada" value="1" min="1" max="{{ Productos.stock }}"
+                                style="width: 60px; margin-right: 10px;">
+                            <!-- Enlace que actúa como botón de envío -->
+                            <a href="javascript:void(0);" class="cart-btn"
+                                onclick="document.getElementById('product-form').submit();">
+                                <i class="fas fa-shopping-cart"></i> Añadir al carrito
+                            </a>
                         </form>
-                        <a href="{% url 'carrito' %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Añadir al carrito</a>
+
+
+
+                        <!-- 
+                        <a href="{% url 'carrito' %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Añadir al
+                            carrito</a>-->
+
                         <p><strong>Categories: </strong>Fruits, Organic</p>
                     </div>
                     <h4>Share:</h4>
@@ -48,13 +65,14 @@
 </div>
 
 
-<div class="product-section mt-150 mb-150"  style="margin-bottom: 400px;">
+<div class="product-section mt-150 mb-150" style="margin-bottom: 400px;">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2 text-center">
-                <div class="section-title">	
+                <div class="section-title">
                     <h3><span class="orange-text">Related</span> Products</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
+                        beatae optio.</p>
                 </div>
             </div>
         </div>
@@ -62,7 +80,8 @@
             <div class="col-lg-4 col-md-6 text-center">
                 <div class="single-product-item">
                     <div class="product-image">
-                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-1.jpg' %}" alt=""></a>
+                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-1.jpg' %}"
+                                alt=""></a>
                     </div>
                     <h3>Strawberry</h3>
                     <p class="product-price"><span>Per Kg</span> 85$ </p>
@@ -72,7 +91,8 @@
             <div class="col-lg-4 col-md-6 text-center">
                 <div class="single-product-item">
                     <div class="product-image">
-                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-2.jpg' %}" alt=""></a>
+                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-2.jpg' %}"
+                                alt=""></a>
                     </div>
                     <h3>Berry</h3>
                     <p class="product-price"><span>Per Kg</span> 70$ </p>
@@ -82,7 +102,8 @@
             <div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3 text-center">
                 <div class="single-product-item">
                     <div class="product-image">
-                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-3.jpg' %}" alt=""></a>
+                        <a href="single-product.html"><img src="{% static 'core/img/products/product-img-3.jpg' %}"
+                                alt=""></a>
                     </div>
                     <h3>Lemon</h3>
                     <p class="product-price"><span>Per Kg</span> 35$ </p>
