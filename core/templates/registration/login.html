@@ -15,7 +15,7 @@
             <h3 class="mb-5">Iniciar sesión</h3>
             <form id="comentarForm" method="POST">
             {% csrf_token %}    
-            {{ form | crispy }}
+            {{ form }}
             
             <!-- Checkbox -->
             <div class="form-check d-flex justify-content-start mb-4">
