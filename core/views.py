@@ -88,6 +88,7 @@ def descripcion(request, id):
 def carrito(request):
     carrito_items = Carrito.objects.filter(usuario=request.user)
     total_precio = 0
+    despacho = 1000
 
     productos_en_carrito = []
 
@@ -105,15 +106,44 @@ def carrito(request):
 
     datos = {
         'listarproductos': productos_en_carrito,
-        'total_precio': total_precio
+        'total_precio': total_precio,
+        
     }
     return render(request, 'core/carrito.html', datos)
 
 
 
 
+
 def checkout(request):
-    return render(request, 'core/checkout.html')
+    carrito_items = Carrito.objects.filter(usuario=request.user)
+    total_precio = sum(item.producto.precio * item.cantidad_agregada for item in carrito_items)
+    productos_en_carrito = [{
+        'producto': item.producto,
+        'cantidad_agregada': item.cantidad_agregada,
+        'subtotal_producto': item.producto.precio * item.cantidad_agregada
+    } for item in carrito_items]
+
+    if request.method == 'POST':
+        tipo_entrega = request.POST.get('tipo_entrega')
+        costo_envio = 0
+
+        if tipo_entrega == 'envio':
+            costo_envio = 50  # Asigna el costo de envío aquí
+
+        total_final = total_precio + costo_envio
+
+        # Aquí podrías guardar la información del pedido si es necesario
+        # y redirigir al proceso de pago de Mercado Pago.
+
+        messages.success(request, f'Pago realizado con éxito. Total final: ${total_final}')
+        return redirect('index')
+
+    data = {
+        'productos_en_carrito': productos_en_carrito,
+        'total_precio': total_precio
+    }
+    return render(request, 'core/checkout.html', data)
 
 def envio(request):
     return render(request, 'core/envio.html')

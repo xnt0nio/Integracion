@@ -57,22 +57,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="total-data">
-                                <td><strong>Subtotal: </strong></td>
-                                <td>$500</td>
-                            </tr>
-                            <tr class="total-data">
-                                <td><strong>Shipping: </strong></td>
-                                <td>$45</td>
-                            </tr>
+
+
                             <tr class="total-data">
                                 <td><strong>Total: </strong></td>
-                                <td>$545</td>
+                                <td>${{ total_precio }}</td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="cart-buttons">
-                        <a href="cart.html" class="boxed-btn">Actualizar carrito</a>
+                            
                         <a href="{% url 'checkout' %}" class="boxed-btn black">Realizar pago</a>
                     </div>
                 </div>
@@ -81,7 +75,7 @@
                     <div class="coupon-form-wrap">
                         <form action="index.html">
                             <p><input type="text" placeholder="Coupon"></p>
-                            <p><input type="submit" value="Apply"></p>
+                            <a href="" class="boxed-btn black">Aplicar</a>
                         </form>
                     </div>
                 </div>
