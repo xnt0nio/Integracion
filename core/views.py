@@ -203,3 +203,15 @@ def eliminar_producto(request, id):
     return redirect("carrito")
 
 
+
+
+# En views.py
+from django.http import JsonResponse
+
+def calcular_total(request):
+    tipo_entrega = request.GET.get('tipo_entrega', 'retiro')
+    carrito_items = Carrito.objects.filter(usuario=request.user)
+    total_precio = sum(item.producto.precio * item.cantidad_agregada for item in carrito_items)
+    costo_envio = 50 if tipo_entrega == 'envio' else 0
+    total_final = total_precio + costo_envio
+    return JsonResponse({'total_final': total_final})

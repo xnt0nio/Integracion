@@ -13,5 +13,7 @@ urlpatterns = [
     path('add/', add, name="add"),
     path('accounts/', include('django.contrib.auth.urls')),
     path('eliminar_producto/<id>/', eliminar_producto, name="eliminar_producto"),
+
+    path('calcular_total/', calcular_total, name='calcular_total'),
     
 ]

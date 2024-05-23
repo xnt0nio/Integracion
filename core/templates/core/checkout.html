@@ -31,10 +31,12 @@
                                             <p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something"></textarea></p>
                                             <p>
                                                 <label for="tipo_entrega">Tipo de entrega:</label>
-                                                <select name="tipo_entrega" id="tipo_entrega" required>
+                                                <select name="tipo_entrega" id="tipo_entrega" required onchange="updateTotal()">
                                                     <option value="retiro">Retiro en tienda</option>
                                                     <option value="envio">Envío a domicilio</option>
                                                 </select>
+                                                
+                                                
                                             </p>
                                             <!-- Aquí podrías agregar otros campos si es necesario -->
                                         </form>
@@ -106,6 +108,24 @@
         var totalCost = totalPrecio + shippingCost;
         document.getElementById('total_cost').textContent = '$' + totalCost;
     });
+
+
+</script>
+
+
+<script>
+function updateTotal() {
+    const tipoEntrega = document.getElementById('tipo_entrega').value;
+
+    fetch(`/calcular_total?tipo_entrega=${tipoEntrega}`) // Asegúrate de que la URL está correcta
+        .then(response => response.json())
+        .then(data => {
+            const totalFinal = data.total_final;
+            document.getElementById("checkoutBtn").setAttribute('data-total', totalFinal.toString());
+            document.getElementById("total_display").textContent = '$' + totalFinal;
+        })
+        .catch(error => console.error('Error al actualizar el total:', error));
+}
 
 
 </script>
