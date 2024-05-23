@@ -124,10 +124,10 @@ def checkout(request):
         'subtotal_producto': item.producto.precio * item.cantidad_agregada
     } for item in carrito_items]
 
+    costo_envio = 0
+
     if request.method == 'POST':
         tipo_entrega = request.POST.get('tipo_entrega')
-        costo_envio = 0
-
         if tipo_entrega == 'envio':
             costo_envio = 50  # Asigna el costo de envío aquí
 
@@ -141,7 +141,9 @@ def checkout(request):
 
     data = {
         'productos_en_carrito': productos_en_carrito,
-        'total_precio': total_precio
+        'total_precio': total_precio,
+        'costo_envio': costo_envio,
+        'total_final': total_precio + costo_envio
     }
     return render(request, 'core/checkout.html', data)
 

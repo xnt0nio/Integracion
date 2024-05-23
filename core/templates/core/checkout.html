@@ -29,13 +29,14 @@
                                             <p><input type="text" name="address" placeholder="Address" required></p>
                                             <p><input type="tel" name="phone" placeholder="Phone" required></p>
                                             <p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something"></textarea></p>
-											<p>
-												<label for="tipo_entrega">Tipo de entrega:</label>
-												<select name="tipo_entrega" id="tipo_entrega" required>
-													<option value="retiro">Retiro en tienda</option>
-													<option value="envio">Envío a domicilio</option>
-												</select>
-											</p>
+                                            <p>
+                                                <label for="tipo_entrega">Tipo de entrega:</label>
+                                                <select name="tipo_entrega" id="tipo_entrega" required>
+                                                    <option value="retiro">Retiro en tienda</option>
+                                                    <option value="envio">Envío a domicilio</option>
+                                                </select>
+                                            </p>
+                                            <!-- Aquí podrías agregar otros campos si es necesario -->
                                         </form>
                                     </div>
                                 </div>
@@ -93,5 +94,16 @@
 {% endblock %}
 
 {% block js %}
+<script>
+    document.getElementById('tipo_entrega').addEventListener('change', function() {
+        var tipoEntrega = this.value;
+        var totalPrecio = {{ total_precio }};
+        var shippingCost = tipoEntrega === 'envio' ? 50 : 0;
+        document.getElementById('shipping_cost').textContent = '$' + shippingCost;
+        var totalCost = totalPrecio + shippingCost;
+        document.getElementById('total_cost').textContent = '$' + totalCost;
+    });
 
+
+</script>
 {% endblock %}
