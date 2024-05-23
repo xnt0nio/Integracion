@@ -32,19 +32,21 @@
                         <tbody>
                             {% for aux in listarproductos %}
                             <tr class="table-body-row">
-                                <td class="product-remove"><i class="far fa-window-close" onclick="eliminar_producto({{ aux.id }})" ></i></td>
+                                <td class="product-remove"><i class="far fa-window-close" onclick="eliminar_producto({{ aux.id }})"></i></td>
                                 <td class="product-image"><img src="{{ aux.producto.imagen.url }}" alt=""></td>
                                 <td class="product-name">{{ aux.producto.nombre }}</td>
-                                <td class="product-price">${{ aux.valor}}</td>                             
+                                <td class="product-price">${{ aux.valor }}</td>
                                 <td class="product-total">{{ aux.cantidad_agregada }}</td>
                                 <td class="product-total">${{ aux.total_producto }}</td>
                             </tr>
                             {% endfor %}
+                            
+                            
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
-
             <div class="col-lg-4">
                 <div class="total-section">
                     <table class="total-table">
@@ -74,7 +76,6 @@
                         <a href="{% url 'checkout' %}" class="boxed-btn black">Realizar pago</a>
                     </div>
                 </div>
-
                 <div class="coupon-section">
                     <h3>Appl Coupon</h3>
                     <div class="coupon-form-wrap">

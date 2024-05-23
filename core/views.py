@@ -96,6 +96,7 @@ def carrito(request):
         total_precio += subtotal_producto
         
         productos_en_carrito.append({
+            'id': item.id,  # Asegúrate de que el id del objeto Carrito se incluye aquí
             'producto': item.producto,
             'cantidad_agregada': item.cantidad_agregada,
             'total_producto': subtotal_producto,
@@ -155,12 +156,16 @@ def registro(request):
 
 
 def eliminar_producto(request, id):
-    carro = Carrito.objects.get(id=id)
-    producto = carro.producto
+    try:
+        carro = Carrito.objects.get(id=id)
+        producto = carro.producto
 
-    # Sumar la cantidad del carrito al stock del producto
-    producto.stock += carro.cantidad_agregada
-    producto.save()
+        # Sumar la cantidad del carrito al stock del producto
+        producto.stock += carro.cantidad_agregada
+        producto.save()
 
-    carro.delete()
+        carro.delete()
+        messages.success(request, "Producto eliminado del carrito")
+    except Carrito.DoesNotExist:
+        messages.error(request, "El producto no existe en el carrito")
     return redirect("carrito")
