@@ -201,3 +201,5 @@ def eliminar_producto(request, id):
     except Carrito.DoesNotExist:
         messages.error(request, "El producto no existe en el carrito")
     return redirect("carrito")
+
+

@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const mp = new MercadoPago('TEST-99b079b4-d97b-4ea4-bf60-23112846af0a', {
-        locale: "es-AR",
-    });
+    const mp = new MercadoPago('TEST-99b079b4-d97b-4ea4-bf60-23112846af0a', {locale: "es-AR"});
 
     document.getElementById("checkoutBtn").addEventListener("click", async () => {
+        const totalFinal = parseFloat(document.getElementById("checkoutBtn").dataset.total);  
+
         try {
             const orderData = {
-                title: "producto",
+                title: "Total del Pedido",
                 quantity: 1,
-                price: 1,
+                price: totalFinal,
             };
 
-            console.log("Sending order data:", orderData); // Log los datos que se envían
+            console.log("Sending order data:", orderData); // Log de los datos que se envían
 
             const response = await fetch("http://localhost:3000/create_preference", {
                 method: "POST",
