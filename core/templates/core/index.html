@@ -69,6 +69,22 @@
             <a href="{% url 'productos' %}" class="cart-btn btn-lg">Ver productos</a>
         </div>
     </section>
+
+    {% if user.is_authenticated and user.username == 'admin' %}
+    <div class="list-section pt-150 pb-100">
+        <div class="container">
+            <div class="row">
+                <a href="{% url 'add' %}" class="boton-ferreteria2">Agregar Productos</a>
+                <a href="{% url 'aprobarProductos' %}" class="boton-ferreteria2">Aprobar Productos</a>
+                <a href="{% url 'estadisticas' %}" class="boton-ferreteria2">Informe Ventas</a>
+                <a href="{% url 'aprobarTransferencias' %}" class="boton-ferreteria2">Aprobar Pagos</a>
+                <a href="{% url 'seleccionVentas' %}" class="boton-ferreteria2">Selección de Ventas</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    
     
 
 

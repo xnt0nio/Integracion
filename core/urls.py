@@ -15,6 +15,8 @@ urlpatterns = [
     path('eliminar_producto/<id>/', eliminar_producto, name="eliminar_producto"),
     path('calcular_total/', calcular_total, name='calcular_total'),
     path('registro/', registro, name='registro'),
-  
+    path('seleccionVentas/', seleccionVentas, name='seleccionVentas'),
+    path('aprobarProductos/', aprobarProductos, name='aprobarProductos'),
+    path('aprobarTransferencias/', aprobarTransferencias, name='aprobarTransferencias'),
     
 ]

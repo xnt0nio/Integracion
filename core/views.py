@@ -40,6 +40,16 @@ def test(request):
 
 
 
+def seleccionVentas(request):
+    return render(request, 'core/seleccionVentas.html')
+
+
+def aprobarProductos(request):
+    return render(request, 'core/aprobarProductos.html')
+
+
+def aprobarTransferencias(request):
+    return render(request, 'core/aprobarTransferencias.html')
 
 def productos(request):
     categorias = TipoProducto.objects.all()  # Obtén todos los tipos de productos (categorías)

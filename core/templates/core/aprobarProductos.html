@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+
+
+
+
+
+
+<div class="cart-section mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <h2 class="table-title">Aprobar productos para venta</h2>
+                <div class="cart-table-wrap">
+                    <table class="cart-table">
+                        <thead class="cart-table-head">
+                            <tr class="table-head-row">
+                                <th class="product-remove"></th>
+                                <th class="product-image">Nombre cliente</th>
+                                <th class="product-name">Precio</th>
+                                <th class="product-price">Cantidad</th>
+                                <th class="product-quantity">Total</th>   
+                                <th class="product-quantity">Aprobar</th>    
+                                <th class="product-quantity">Rechazar</th>                     
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                            <tr class="table-body-row">
+
+                                <td class="product-image">
+                                    <img src="{% static 'core/img/ferreteria/alicate.jpeg ' %}" alt="" class="cart-product-image">
+                                </td>
+                                
+                                <td class="product-name">Juan</td>
+                                <td class="product-price">$2.500</td>
+                                <td class="product-total">2</td>
+                                <td class="product-total">$5.000</td>
+                                <td>
+                                    <a href="#" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto; padding: 0.5em 0em;">
+                                        <i class="fas fa-check"></i> Estado del pedido
+                                    </a>
+                                </td>
+                                
+                                <td>
+                                    <a href="#" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto; padding: 0.5em 0em;">
+                                        <i class="fas fa-times"></i> Estado del pedido
+                                    </a>
+                                </td>
+                                
+                            </tr>
+                            
+                            
+                            
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+{% block js %}
+{% endblock %}
