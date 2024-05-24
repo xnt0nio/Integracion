@@ -64,9 +64,19 @@
 							<ul>
 								<li><a href="{% url 'index' %}">Inicio</a></li>						
 								<li><a href="{% url 'productos' %}">Productos</a></li>
+								{% if user.is_authenticated and user.username == 'admin' %}
 								<li><a href="{% url 'add' %}">Añadir producto</a></li>
+								{% endif %}
+								{% if user.is_authenticated %}
 								<li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+								{% else %}
 								<li><a href="{% url 'login' %}">Iniciar sesion</a></li>
+								<li><a href="{% url 'registro' %}">Crear cuenta</a></li>
+								{% endif %}
+
+								
+								
+								
 								
 
 

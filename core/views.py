@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+
 
 
 
@@ -203,10 +205,6 @@ def eliminar_producto(request, id):
     return redirect("carrito")
 
 
-
-
-# En views.py
-from django.http import JsonResponse
 
 def calcular_total(request):
     tipo_entrega = request.GET.get('tipo_entrega', 'retiro')

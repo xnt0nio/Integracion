@@ -14,7 +14,7 @@
               <h3 class="mb-5">Registro de Usuario</h3>
               <form action="" method="POST">
               {% csrf_token %}    
-              {{ form | crispy }}
+              {{ form }}
             
               <!-- Checkbox -->
               <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -22,6 +22,8 @@
                 <div style="display: flex; justify-content: space-between;">
                   <a href="{% url 'index' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Ir al inicio</a>
                   <a href="{% url 'login' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Iniciar sesión</a>
+                  
+                  
                 </div>
               </div>
             </div>
