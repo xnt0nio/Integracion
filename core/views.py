@@ -73,35 +73,58 @@ def productos(request):
 
 def descripcion(request, id):
     producto = get_object_or_404(Producto, id=id)
-    
+    categorias = TipoProducto.objects.all()  # Obtiene todas las categorías
+    productosAll = Producto.objects.all()  # Obtiene todos los productos
+
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(productosAll, 5)  # Pagina los productos, 5 por página
+        productosAll = paginator.page(page)
+    except:
+        raise Http404  # Si la página no es válida, muestra un error 404
+
     if request.method == 'POST':
         try:
             cantidad_agregada = int(request.POST.get('cantidad_agregada', 1))
         except ValueError:
             messages.error(request, "Por favor, introduce una cantidad válida.")
-            return render(request, 'core/descripcion.html', {'Productos': producto})
-        
+            return render(request, 'core/descripcion.html', {
+                'Productos': producto,
+                'listado': productosAll,
+                'paginator': paginator,
+                'categorias': categorias,
+            })
+
         if cantidad_agregada < 1:
             messages.error(request, "La cantidad debe ser al menos 1.")
-            return render(request, 'core/descripcion.html', {'Productos': producto})
+            return render(request, 'core/descripcion.html', {
+                'Productos': producto,
+                'listado': productosAll,
+                'paginator': paginator,
+                'categorias': categorias,
+            })
 
         if producto.stock >= cantidad_agregada:
             carrito, created = Carrito.objects.get_or_create(usuario=request.user, producto=producto, defaults={'cantidad_agregada': 0})
-            
+
             carrito.cantidad_agregada += cantidad_agregada
-          
+
             carrito.save()
 
             producto.stock -= cantidad_agregada
-            producto.precio
             producto.save()
 
             messages.success(request, "Producto agregado correctamente al carrito")
         else:
             messages.error(request, "No hay suficiente stock disponible")
 
-    return render(request, 'core/descripcion.html', {'Productos': producto})
-
+    return render(request, 'core/descripcion.html', {
+        'Productos': producto,
+        'listado': productosAll,
+        'paginator': paginator,
+        'categorias': categorias,
+    })
 
 
 
