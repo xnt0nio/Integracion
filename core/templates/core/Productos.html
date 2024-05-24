@@ -16,20 +16,20 @@
 
         <div class="row">
             {% for aux in listado %}
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="single-product-item">
-                        <div class="product-image">
+                <div class="col-lg-4 col-md-6 text-center" style="padding: 10px;">
+                    <div class="single-product-item" style="height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="product-image" style="height: 200px;">
                             <a href="{% url 'descripcion' aux.id %}">
                                 {% if aux.imagen %}
-                                    <img src="{{ aux.imagen.url }}" alt="{{ aux.nombre }}">
+                                    <img src="{{ aux.imagen.url }}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% else %}
-                                    <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="{{ aux.nombre }}">
+                                    <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% endif %}
                             </a>
                         </div>
-                        <h3>{{ aux.nombre }}</h3>
-                        <p class="product-price"><span>Per Kg</span> ${{ aux.precio }}</p>
-                        <a href="{% url 'descripcion' aux.id %}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                        <h3 style="height: 3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ aux.nombre }}</h3>
+                        <p class="product-price" style="height: 1.5em;"><span>Per Kg</span> ${{ aux.precio }}</p>
+                        <a href="{% url 'descripcion' aux.id %}" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto; padding: 0.5em 1em;"><i class="fas fa-shopping-cart"></i> Agregar al carrito</a>
                     </div>
                 </div>
             {% endfor %}

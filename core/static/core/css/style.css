@@ -45,3 +45,34 @@ input[type="number"] {
     display: inline-block;
     vertical-align: middle;
 }
+
+
+
+.single-product-item {
+    height: 450px; /* Ajusta esta altura según necesites */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-image img {
+    width: 100%; /* Esto hace que la imagen ocupe todo el ancho de la tarjeta */
+    height: 200px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin distorsionarse */
+}
+
+.single-product-item h3 {
+    height: 3em; /* Fija la altura del título para asegurar consistencia */
+    overflow: hidden; /* Oculta el texto que sobrepasa el espacio disponible */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+    white-space: nowrap; /* Evita que el texto se extienda a múltiples líneas */
+}
+
+.product-price {
+    height: 1.5em; /* Altura fija para el precio */
+}
+
+
+.single-product-item {
+    height: 450px !important;
+}

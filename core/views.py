@@ -16,11 +16,29 @@ from django.http import JsonResponse
 
 
 def index(request):
-    return render(request, 'core/index.html')
+    categorias = TipoProducto.objects.all()  # Obtiene todos los tipos de productos (categorías)
+    productosAll = Producto.objects.all()  # Obtiene todos los productos
+
+    page = request.GET.get('page', 1)  # Obtiene el número de página actual
+
+    try:
+        paginator = Paginator(productosAll, 5)  # Pagina los productos, 5 por página
+        productosAll = paginator.page(page)
+    except:
+        raise Http404  # Si la página no es válida, muestra un error 404
+
+    data = {
+        'listado': productosAll,
+        'paginator': paginator,
+        'categorias': categorias,
+    }
+    return render(request, 'core/index.html', data)
 
 
 def test(request):
     return render(request, 'core/test.html')
+
+
 
 
 def productos(request):
