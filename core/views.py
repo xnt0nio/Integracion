@@ -221,23 +221,6 @@ def add(request):
             print(request, "Producto almacenado correctamente")
     return render(request, 'core/add-product.html', data)
 
-def registro(request):
-    data = {
-        'form': CustomUserCreationForm()
-    }
-    if request.method == 'POST':
-        formulario = CustomUserCreationForm(data=request.POST)
-        if formulario.is_valid():
-            formulario.save()
-            user = authenticate(username=formulario.cleaned_data["username"], password=formulario.cleaned_data["password1"])
-            grupo = Group.objects.get(name="cliente")
-            user.groups.add(grupo)
-            login(request, user)
-            messages.success(request, "Te has registrado correctamente")
-            #redirigir al home
-            return redirect(to="index")
-        data["form"] = formulario    
-    return render(request, 'registration/registro.html',data)
 
 
 def eliminar_producto(request, id):
@@ -264,3 +247,42 @@ def calcular_total(request):
     costo_envio = 50 if tipo_entrega == 'envio' else 0
     total_final = total_precio + costo_envio
     return JsonResponse({'total_final': total_final})
+
+
+
+import requests
+
+def generate_password():
+    length = '16'
+    api_url = 'https://api.api-ninjas.com/v1/passwordgenerator?length={}'.format(length)
+    response = requests.get(api_url, headers={'X-Api-Key': 'XMZLg6E/i/Erh5gI9Fwcjg==VenIHyGeJ7AjTfDo'})
+    if response.status_code == 200:
+        return response.json()['random_password']  # Asegúrate de que 'random_password' sea el campo correcto
+    else:
+        raise Exception("Error al generar contraseña: {} {}".format(response.status_code, response.text))
+
+
+
+
+def registro(request):
+    password = generate_password()  # Generar contraseña automáticamente
+    if request.method == 'POST':
+        formulario = CustomUserCreationForm(data=request.POST)
+        if formulario.is_valid():
+            user = formulario.save(commit=False)
+            user.set_password(password)  # Establecer la contraseña generada
+            user.save()
+            grupo = Group.objects.get(name="cliente")
+            user.groups.add(grupo)
+            user = authenticate(username=formulario.cleaned_data["username"], password=password)
+            login(request, user)
+            messages.success(request, "Te has registrado correctamente")
+            return redirect(to="index")
+    else:
+        formulario = CustomUserCreationForm(initial={'password1': password, 'password2': password})
+
+    data = {
+        'form': formulario,
+        'generated_password': password  # Pasar la contraseña generada al contexto
+    }
+    return render(request, 'registration/registro.html', data)

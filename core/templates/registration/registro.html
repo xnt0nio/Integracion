@@ -13,19 +13,25 @@
             <div class="card-body p-5 text-center">
               <h3 class="mb-5">Registro de Usuario</h3>
               <form action="" method="POST">
-              {% csrf_token %}    
-              {{ form }}
-            
-              <!-- Checkbox -->
-              <div style="display: flex; flex-direction: column; gap: 10px;">
-                <input type="submit" value="Registrar" class="btn btn-success btn-lg btn-block">
-                <div style="display: flex; justify-content: space-between;">
-                  <a href="{% url 'index' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Ir al inicio</a>
-                  <a href="{% url 'login' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Iniciar sesión</a>
-                  
-                  
+                {% csrf_token %}    
+                {{ form }}
+                
+                {% if generated_password %}
+                <div class="form-group">
+                    <label for="generated_password">Contraseña sugerida:</label>
+                    <input type="text" id="generated_password" class="form-control" value="{{ generated_password }}" readonly>
                 </div>
-              </div>
+                {% endif %}
+                
+                <!-- Botones -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <input type="submit" value="Registrar" class="btn btn-success btn-lg btn-block">
+                  <div style="display: flex; justify-content: space-between;">
+                    <a href="{% url 'index' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Ir al inicio</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary boton-pequeno" style="max-width: 150px;">Iniciar sesión</a>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -34,5 +40,5 @@
   </section>
   {% endblock %}
 {% block js %}
-
+<script src="{% static 'path/to/app.js' %}"></script>
 {% endblock %}
