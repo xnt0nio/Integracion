@@ -29,5 +29,8 @@ urlpatterns = [
     path('aprobarProductos/', aprobarProductos, name='aprobarProductos'),
     path('aprobarTransferencias/', aprobarTransferencias, name='aprobarTransferencias'),
     path('indexapi', indexapi, name="indexapi"),
+
+    path('success/', success, name='success'),
+    path('cancel/', cancel, name='cancel'),
     
 ]

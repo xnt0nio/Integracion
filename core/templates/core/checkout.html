@@ -1,3 +1,5 @@
+<!-- templates/checkout.html -->
+
 {% extends 'core/base.html' %}
 {% load static %}
 {% block css %}
@@ -35,8 +37,6 @@
                                                     <option value="retiro">Retiro en tienda</option>
                                                     <option value="envio">Envío a domicilio</option>
                                                 </select>
-                                                
-                                                
                                             </p>
                                             <!-- Aquí podrías agregar otros campos si es necesario -->
                                         </form>
@@ -86,9 +86,6 @@
                     </table>
 
                     <button id="checkoutBtn" class="boton-ferreteria" data-total="{{ total_final }}">Comprar</button>
-
-                    
-                 
                     <div id="wallet_container"></div>
                 </div>
             </div>
@@ -109,24 +106,22 @@
         document.getElementById('total_cost').textContent = '$' + totalCost;
     });
 
+    function updateTotal() {
+        const tipoEntrega = document.getElementById('tipo_entrega').value;
+        fetch(`/calcular_total?tipo_entrega=${tipoEntrega}`)
+            .then(response => response.json())
+            .then(data => {
+                const totalFinal = data.total_final;
+                document.getElementById("checkoutBtn").setAttribute('data-total', totalFinal.toString());
+                document.getElementById("total_display").textContent = '$' + totalFinal;
+            })
+            .catch(error => console.error('Error al actualizar el total:', error));
+    }
 
-</script>
-
-
-<script>
-function updateTotal() {
-    const tipoEntrega = document.getElementById('tipo_entrega').value;
-
-    fetch(`/calcular_total?tipo_entrega=${tipoEntrega}`) // Asegúrate de que la URL está correcta
-        .then(response => response.json())
-        .then(data => {
-            const totalFinal = data.total_final;
-            document.getElementById("checkoutBtn").setAttribute('data-total', totalFinal.toString());
-            document.getElementById("total_display").textContent = '$' + totalFinal;
-        })
-        .catch(error => console.error('Error al actualizar el total:', error));
-}
-
-
+    document.getElementById('checkoutBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        var form = document.getElementById('checkoutForm');
+        form.submit();
+    });
 </script>
 {% endblock %}

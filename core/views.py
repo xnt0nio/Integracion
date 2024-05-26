@@ -188,7 +188,10 @@ def carrito(request):
 
 
 
+import stripe
+from django.conf import settings
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def checkout(request):
     carrito_items = Carrito.objects.filter(usuario=request.user)
@@ -208,19 +211,45 @@ def checkout(request):
 
         total_final = total_precio + costo_envio
 
-        # Aquí podrías guardar la información del pedido si es necesario
-        # y redirigir al proceso de pago de Mercado Pago.
+        # Crear una sesión de pago con Stripe
+        YOUR_DOMAIN = "http://localhost:8000"
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': 'Compra en Ferretería',
+                        },
+                        'unit_amount': int(total_final * 100),  # Monto en centavos
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/success/',
+            cancel_url=YOUR_DOMAIN + '/cancel/',
+        )
 
-        messages.success(request, f'Pago realizado con éxito. Total final: ${total_final}')
-        return redirect('index')
+        return redirect(checkout_session.url, code=303)
 
     data = {
         'productos_en_carrito': productos_en_carrito,
         'total_precio': total_precio,
         'costo_envio': costo_envio,
-        'total_final': total_precio + costo_envio
+        'total_final': total_precio + costo_envio,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
     }
     return render(request, 'core/checkout.html', data)
+
+def success(request):
+    messages.success(request, "Pago realizado con éxito.")
+    return redirect('index')
+
+def cancel(request):
+    messages.error(request, "El pago ha sido cancelado.")
+    return redirect('checkout')
 
 def envio(request):
     return render(request, 'core/envio.html')
