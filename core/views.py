@@ -10,8 +10,30 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from rest_framework import viewsets
+from .serializers import *
+
+class ProductoViewsets(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    #queryset = Producto.objects.filter()
+
+    serializer_class = ProductoSerializer
+
+class TipoProductoViewsets(viewsets.ModelViewSet):
+    queryset = TipoProducto.objects.all()
+    #queryset = Producto.objects.filter()
+
+    serializer_class = TipoProductoSerializer
 
 
+def indexapi(request):
+    # Obtiene los datos del API
+    respuesta = requests.get('http://127.0.0.1:8000/api/productos/')
+    productos = respuesta.json()
+    data = {
+        'listado': productos,
+    }
+    return render(request, 'core/indexapi.html', data)    
 
 
 

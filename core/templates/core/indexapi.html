@@ -1,0 +1,140 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+{% block contenido %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+    <!-- title -->
+    <title>Fruitkha</title>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="{% static 'core/css/all.min.css' %}">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'core/bootstrap/css/bootstrap.min.css' %}">
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="{% static 'core/css/owl.carousel.css' %}">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="{% static 'core/css/magnific-popup.css' %}">
+    <!-- animate css -->
+    <link rel="stylesheet" href="{% static 'core/css/animate.css' %}">
+    <!-- mean menu css -->
+    <link rel="stylesheet" href="{% static 'core/css/meanmenu.min.css' %}">
+    <!-- main style -->
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+    <!-- responsive -->
+    <link rel="stylesheet" href="{% static 'core/css/responsive.css' %}">
+
+</head>
+
+<body>
+
+
+
+    <div class="list-section pt-150 pb-80">
+        <div class="container">
+            <div class="row">            
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Ferretería</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Herramientas</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Maderas</button>
+                <button href="{% url 'productos' %}" class="boton-ferreteria">Pinturas</button>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+    <section class="shop-banner" style="display: flex; justify-content: center; align-items: center; height: 100vh; text-align: center;">
+        <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <h3>TENEMOS TODO <br> LO QUE BUSCAS!</h3>
+            <a href="{% url 'productos' %}" class="cart-btn btn-lg">Ver productos</a>
+        </div>
+    </section>
+
+    {% if user.is_authenticated and user.username == 'admin' %}
+    <div class="list-section pt-150 pb-100">
+        <div class="container">
+            <div class="row">
+                <a href="{% url 'add' %}" class="boton-ferreteria2">Agregar Productos</a>
+                <a href="{% url 'aprobarProductos' %}" class="boton-ferreteria2">Aprobar Productos</a>
+                <a href="{% url 'estadisticas' %}" class="boton-ferreteria2">Informe Ventas</a>
+                <a href="{% url 'aprobarTransferencias' %}" class="boton-ferreteria2">Aprobar Pagos</a>
+                <a href="{% url 'seleccionVentas' %}" class="boton-ferreteria2">Selección de Ventas</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    
+    
+
+
+
+    <div class="product-section mt-150 mb-150"  style="margin-bottom: 400px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="section-title">
+                        <h3><span class="orange-text"></span> Algunos de nuestros productos</h3>
+                
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for aux in listado %}
+                    <div class="col-lg-4 col-md-6 text-center" style="padding: 10px;">
+                        <div class="single-product-item" style="height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div class="product-image" style="height: 200px;">
+                                <a href="{% url 'descripcion' aux.id %}">
+                                    {% if aux.imagen %}
+                                        <img src="{{ aux.imagen }}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% else %}
+                                        <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <h3 style="height: 3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ aux.nombre }}</h3>
+                            <p class="product-price" style="height: 1.5em;"><span>Tipo Producto: {{ aux.tipo.descripcion }}</span> ${{ aux.precio }}</p>
+                            <a href="{% url 'descripcion' aux.id %}" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto; padding: 0.5em 1em;"><i class="fas fa-shopping-cart"></i> Agregar al carrito</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+
+            
+        </div>
+    </div>
+   
+
+
+</body>
+
+</html>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

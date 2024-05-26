@@ -1,8 +1,16 @@
 from django.urls import include, path
 from .views import *
+from rest_framework import routers
+
+
+router = routers.DefaultRouter()
+router.register('productos', ProductoViewsets)
+router.register('tipoproductos', TipoProductoViewsets)
 
 urlpatterns = [
     path('', index, name="index"),
+    path('api/', include(router.urls)),
+    
     path('test', test, name="test"),
     path('productos', productos, name="productos"),
     path('descripcion/<id>/', descripcion, name="descripcion"),
@@ -18,5 +26,6 @@ urlpatterns = [
     path('seleccionVentas/', seleccionVentas, name='seleccionVentas'),
     path('aprobarProductos/', aprobarProductos, name='aprobarProductos'),
     path('aprobarTransferencias/', aprobarTransferencias, name='aprobarTransferencias'),
+    path('indexapi', indexapi, name="indexapi"),
     
 ]
