@@ -13,3 +13,7 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = '__all__'
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'  

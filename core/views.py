@@ -25,7 +25,12 @@ class TipoProductoViewsets(viewsets.ModelViewSet):
 
     serializer_class = TipoProductoSerializer
 
+class PaymentViewsets(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    #queryset = Producto.objects.filter()
 
+    serializer_class = PaymentSerializer
+    
 def indexapi(request):
     # Obtiene los datos del API
     respuesta = requests.get('http://127.0.0.1:8000/api/productos/')
@@ -244,7 +249,7 @@ def checkout(request):
         'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
     }
     return render(request, 'core/checkout.html', data)
-
+from decimal import Decimal
 
 def success(request):
     session_id = request.GET.get('session_id')
@@ -259,8 +264,11 @@ def success(request):
     payment = Payment.objects.create(
         user=request.user,
         stripe_charge_id=session.payment_intent,
-        amount=amount
+        amount=Decimal(amount)
     )
+
+    # Vaciar el carrito del usuario
+    Carrito.objects.filter(usuario=request.user).delete()
 
     # Redirigir a la vista del comprobante
     return redirect('receipt', payment_id=payment.id)

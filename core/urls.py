@@ -6,7 +6,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('productos', ProductoViewsets)
 router.register('tipoproductos', TipoProductoViewsets)
-
+router.register('payment', PaymentViewsets)
 urlpatterns = [
     path('', index, name="index"),
     path('api/', include(router.urls)),
@@ -33,5 +33,6 @@ urlpatterns = [
     path('success/', success, name='success'),
     path('cancel/', cancel, name='cancel'),
     path('receipt/<int:payment_id>/', receipt, name='receipt'),
+    
     
 ]
