@@ -16,6 +16,7 @@
 
         <div class="row">
             {% for aux in listado %}
+                {% if aux.vigente == 1 %}
                 <div class="col-lg-4 col-md-6 text-center" style="padding: 10px;">
                     <div class="single-product-item" style="height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
                         <div class="product-image" style="height: 200px;">
@@ -23,19 +24,38 @@
                                 {% if aux.imagen %}
                                     <img src="{{ aux.imagen.url }}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% else %}
-                                    <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="{{ aux.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="{% static 'core/img/products/product-img-1.jpg' %}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
                                 {% endif %}
                             </a>
                         </div>
-                        <h3 style="height: 3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ aux.nombre }}</h3>
-                        <p class="product-price" style="height: 1.5em;"><span>Per Kg</span> ${{ aux.precio }}</p>
-                        <a href="{% url 'descripcion' aux.id %}" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto; padding: 0.5em 1em;"><i class="fas fa-shopping-cart"></i> Agregar al carrito</a>
+                        <h3 style="height: 3em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></h3>
+                        <p class="product-price" style="height: 1.5em;">{{ aux.nombre }}</p>
+                        {%  if aux.stock == 0%}
+                        <p>Stock Disponible: producto agotado</p>
+                        {% else %}
+                        <p>Stock Disponible: {{ aux.stock }}</p>
+                        <h5>${{ aux.precio }}</h5>
+                        {% endif %}
+                        <a href="{% url 'descripcion' aux.id %}" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 0 auto 5px; padding: 0.5em 1em;">
+                            <i class="fas fa-shopping-cart"></i> Agregar al carrito
+                        </a>
+                        <a href="{% url 'update' aux.id %}" class="cart-btn" style="max-width: 200px; width: auto; display: block; margin: 5px auto 0; padding: 0.5em 1em;">
+                            <i class="fa fa-refresh"></i> update
+                        </a>
+                        <a href="javascript:void(0);" class="cart-btn" onclick="deleteProducto({{ aux.id }});" style="max-width: 200px; width: auto; display: block; margin: 5px auto 0; padding: 0.5em 1em;">
+                            <i class="fa fa-trash"></i> Eliminar
+                        </a>
                     </div>
                 </div>
+                {% endif %}
             {% endfor %}
+            
         </div>
+        {% include 'core/paginator.html' %}
     </div>
+    
 </div>
 {% endblock %}
 {% block js %}
+<script src="{% static 'core/js/mensaje.js' %}"></script>
 {% endblock %}

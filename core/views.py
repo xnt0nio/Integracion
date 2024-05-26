@@ -308,3 +308,28 @@ def registro(request):
         'generated_password': password  # Pasar la contraseña generada al contexto
     }
     return render(request, 'registration/registro.html', data)
+
+
+def update(request, id):
+    producto = Producto.objects.get(id=id) # OBTIENE UN PRODUCTO POR EL ID
+    data = {
+        'form' : ProductoForm(instance=producto) # CARGAMOS EL PRODUCTO EN EL FORMULARIO
+    }
+
+    if request.method == 'POST':
+        formulario = ProductoForm(data=request.POST, instance=producto, files=request.FILES) # NUEVA INFORMACION
+        if formulario.is_valid():
+            formulario.save() # INSERT INTO.....
+            #data['msj'] = "Producto actualizado correctamente"
+            messages.success(request, "Producto modificado correctamente")
+            data['form'] = formulario # CARGA LA NUEVA INFOR EN EL FORMULARIO
+
+    return render(request, 'core/update-product.html', data)
+
+
+
+def delete(request, id):
+    producto = Producto.objects.get(id=id) # OBTIENE UN PRODUCTO POR EL ID
+    producto.delete()
+
+    return redirect(to="index")

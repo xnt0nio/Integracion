@@ -37,10 +37,16 @@
                             <input type="number" name="cantidad_agregada" value="1" min="1" max="{{ Productos.stock }}"
                                 style="width: 60px; margin-right: 10px;">
                             <!-- Enlace que actúa como botón de envío -->
-                            <a href="javascript:void(0);" class="cart-btn"
-                                onclick="document.getElementById('product-form').submit();">
+
+                            {% if Productos.stock == 0 %}
+                            <a href="javascript:void(0);" class="cart-btn disabled">
+                                <i class="fas fa-shopping-cart"></i> No hay stock disponible
+                            </a>
+                        {% else %}
+                            <a href="javascript:void(0);" class="cart-btn" onclick="document.getElementById('product-form').submit();">
                                 <i class="fas fa-shopping-cart"></i> Añadir al carrito
                             </a>
+                        {% endif %}
                         </form>
 
 
@@ -101,4 +107,19 @@
 
 {% endblock %}
 {% block js %}
+{% if messages %}
+{% for aux in messages %}
+<script>
+  Swal.fire({
+    title: 'Confirmación',
+    text: '{{ aux }}',
+    icon: 'success',
+    showCancelButton: false,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Aceptar'
+  })
+</script>
+{% endfor %}
+{% endif %}
 {% endblock %}
