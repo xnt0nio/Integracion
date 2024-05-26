@@ -392,3 +392,9 @@ def delete(request, id):
     producto.delete()
 
     return redirect(to="index")
+
+
+
+
+def historialPagos(request):
+    return render(request, 'core/historialPagos.html')
