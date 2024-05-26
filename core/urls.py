@@ -32,5 +32,6 @@ urlpatterns = [
 
     path('success/', success, name='success'),
     path('cancel/', cancel, name='cancel'),
+    path('receipt/<int:payment_id>/', receipt, name='receipt'),
     
 ]

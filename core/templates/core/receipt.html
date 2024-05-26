@@ -1,0 +1,14 @@
+<!-- templates/core/receipt.html -->
+
+{% extends 'core/base.html' %}
+{% block contenido %}
+<h2>Comprobante de Pago</h2>
+<p>Gracias por tu compra, {{ payment.user.username }}.</p>
+<p>Detalles del pago:</p>
+<ul>
+    <li>ID del Pago: {{ payment.stripe_charge_id }}</li>
+    <li>Monto: ${{ payment.amount }}</li>
+    <li>Fecha: {{ payment.timestamp }}</li>
+</ul>
+<a href="{% url 'index' %}">Volver al inicio</a>
+{% endblock %}

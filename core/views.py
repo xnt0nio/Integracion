@@ -193,6 +193,8 @@ from django.conf import settings
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+# views.py
+
 def checkout(request):
     carrito_items = Carrito.objects.filter(usuario=request.user)
     total_precio = sum(item.producto.precio * item.cantidad_agregada for item in carrito_items)
@@ -228,7 +230,7 @@ def checkout(request):
                 },
             ],
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success/',
+            success_url=YOUR_DOMAIN + '/success/?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=YOUR_DOMAIN + '/cancel/',
         )
 
@@ -243,13 +245,33 @@ def checkout(request):
     }
     return render(request, 'core/checkout.html', data)
 
+
 def success(request):
-    messages.success(request, "Pago realizado con éxito.")
-    return redirect('index')
+    session_id = request.GET.get('session_id')
+    if session_id is None:
+        messages.error(request, "El ID de sesión no se proporcionó.")
+        return redirect('checkout')
+
+    session = stripe.checkout.Session.retrieve(session_id)
+    amount = session.amount_total / 100  # Convertir de centavos a dólares
+
+    # Guardar los detalles del pago en la base de datos
+    payment = Payment.objects.create(
+        user=request.user,
+        stripe_charge_id=session.payment_intent,
+        amount=amount
+    )
+
+    # Redirigir a la vista del comprobante
+    return redirect('receipt', payment_id=payment.id)
 
 def cancel(request):
     messages.error(request, "El pago ha sido cancelado.")
     return redirect('checkout')
+
+def receipt(request, payment_id):
+    payment = get_object_or_404(Payment, id=payment_id, user=request.user)
+    return render(request, 'core/receipt.html', {'payment': payment})
 
 def envio(request):
     return render(request, 'core/envio.html')
