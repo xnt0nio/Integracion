@@ -1,14 +1,108 @@
-<!-- templates/core/receipt.html -->
-
 {% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
 {% block contenido %}
-<h2>Comprobante de Pago</h2>
-<p>Gracias por tu compra, {{ payment.user.username }}.</p>
-<p>Detalles del pago:</p>
-<ul>
-    <li>ID del Pago: {{ payment.stripe_charge_id }}</li>
-    <li>Monto: ${{ payment.amount }}</li>
-    <li>Fecha: {{ payment.timestamp }}</li>
-</ul>
-<a href="{% url 'index' %}">Volver al inicio</a>
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante de Pago</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .receipt-container {
+            border: 2px solid green; /* Borde del contenedor del recibo */
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto; /* Añadir margen para separar del header y footer */
+        }
+        .header, .section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header div, .section div {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid green; /* Borde de las secciones del recibo */
+            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño del borde */
+        }
+        .header div:not(:last-child), .section div:not(:last-child) {
+            border-right: none; /* Remover el borde derecho excepto en el último elemento */
+        }
+        .concept, .signature {
+            margin-top: 20px;
+            border: 1px solid green; /* Borde de las secciones de concepto y firma */
+            padding: 10px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño del borde */
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Contenido del recibo de pago -->
+    <div class="receipt-container">
+        <h2>MODELO DE RECIBO DE PAGO</h2>
+        <p>Plantilla 1 - Quipu</p>
+
+        <div class="header">
+            <div>
+                <strong>Recibo</strong><br>
+                Nombre de la Empresa<br>
+                Dirección<br>
+                Página web<br>
+                Teléfono
+            </div>
+            <div>
+                <strong>Logotipo</strong><br>
+                Fecha: XX/XX/XXXX<br>
+                Número de Recibo
+            </div>
+        </div>
+
+        <div class="section">
+            <div>
+                <strong>Cliente</strong><br>
+                Nombre del Cliente<br>
+                Dirección<br>
+                Página Web<br>
+                Teléfono
+            </div>
+            <div>
+                <strong>Envié A:</strong><br>
+                Nombre de Contacto<br>
+                Dirección<br>
+                Teléfono
+            </div>
+        </div>
+
+        <div class="concept">
+            <strong>Concepto</strong><br>
+            Pago Parcial / Total<br>
+            Cantidad (Nº y Letras)
+        </div>
+
+        <div class="signature">
+            <strong>Firma</strong>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+{% endblock %}
+
+{% block js %}
+
 {% endblock %}
