@@ -65,14 +65,14 @@
             </div>
             <div>
                 <strong>Logotipo</strong><br>
-                Fecha: XX/XX/XXXX<br>
-                Número de Recibo
+                Fecha: {{ payment.timestamp }} <br>
+                Número de Recibo {{ payment.stripe_charge_id }}
             </div>
         </div>
 
         <div class="section">
             <div>
-                <strong>Cliente</strong><br>
+                <strong>Cliente {{ payment.user.username }}</strong><br>
                 Nombre del Cliente<br>
                 Dirección<br>
                 Página Web<br>
@@ -89,7 +89,7 @@
         <div class="concept">
             <strong>Concepto</strong><br>
             Pago Parcial / Total<br>
-            Cantidad (Nº y Letras)
+            Cantidad (Nº y Letras) {{ payment.amount }}
         </div>
 
         <div class="signature">
