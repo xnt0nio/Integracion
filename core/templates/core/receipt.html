@@ -19,7 +19,7 @@
             box-sizing: border-box;
         }
         .receipt-container {
-            border: 2px solid green; /* Borde del contenedor del recibo */
+            border: 2px solid #0000FF; /* Borde del contenedor del recibo */
             padding: 20px;
             max-width: 600px;
             margin: 20px auto; /* Añadir margen para separar del header y footer */
@@ -32,7 +32,7 @@
         .header div, .section div {
             flex: 1;
             padding: 10px;
-            border: 1px solid green; /* Borde de las secciones del recibo */
+            border: 1px solid #0000FF; /* Borde de las secciones del recibo */
             box-sizing: border-box; /* Asegura que el padding no afecte el tamaño del borde */
         }
         .header div:not(:last-child), .section div:not(:last-child) {
@@ -40,7 +40,7 @@
         }
         .concept, .signature {
             margin-top: 20px;
-            border: 1px solid green; /* Borde de las secciones de concepto y firma */
+            border: 1px solid #0000FF; /* Borde de las secciones de concepto y firma */
             padding: 10px;
             box-sizing: border-box; /* Asegura que el padding no afecte el tamaño del borde */
         }
@@ -76,11 +76,11 @@
                 Teléfono: {{ payment.phone }}
             </div>
             <div>
-                <strong>Envié A:</strong><br>
+                <strong>Datos de envio:</strong><br>
                 <!-- Puedes agregar más información aquí si es necesario -->
                 Nombre de Contacto: {{ payment.name }}<br>
-                Dirección: {{ payment.address }}<br><br>
-                Teléfono: {{ payment.phone }}
+                Dirección: {{ payment.address }}<br> Teléfono: {{ payment.phone }}<br>
+               
             </div>
         </div>
 
@@ -90,9 +90,7 @@
             ${{ payment.amount }}
         </div>
 
-        <div class="signature">
-            <strong>Firma</strong>
-        </div>
+    
     </div>
 
 </body>
