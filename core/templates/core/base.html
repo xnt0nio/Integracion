@@ -69,7 +69,9 @@
 								<li><a href="{% url 'add' %}">Añadir producto</a></li>
 								{% endif %}
 								{% if user.is_authenticated %}
+								<li><a href="{% url 'historialPagos' %}">Historial compras</a></li>
 								<li><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
+
 								{% else %}
 								<li><a href="{% url 'login' %}">Iniciar sesion</a></li>
 								<li><a href="{% url 'registro' %}">Crear cuenta</a></li>
