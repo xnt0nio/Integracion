@@ -1,10 +1,9 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block css %}
-
+<!-- Puedes agregar estilos adicionales aquí si es necesario -->
 {% endblock %}
 {% block contenido %}
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -49,22 +48,20 @@
 </head>
 <body>
 
-
     <!-- Contenido del recibo de pago -->
     <div class="receipt-container">
-        <h2>MODELO DE RECIBO DE PAGO</h2>
-        <p>Plantilla 1 - Quipu</p>
+        <h2>RECIBO DE PAGO</h2>
 
         <div class="header">
             <div>
                 <strong>Recibo</strong><br>
-                Nombre de la Empresa<br>
-                Dirección<br>
-                Página web<br>
-                Teléfono
+                Nombre de la Empresa: Ferremax<br>
+                Dirección: La casa del antonio<br>
+                Página web:  esta<br>
+                Teléfono: +569 55112244
             </div>
             <div>
-                <strong>Logotipo</strong><br>
+                <strong>Valores</strong><br>
                 Fecha: {{ payment.timestamp }} <br>
                 Número de Recibo {{ payment.stripe_charge_id }}
             </div>
@@ -72,24 +69,25 @@
 
         <div class="section">
             <div>
-                <strong>Cliente {{ payment.user.username }}</strong><br>
-                Nombre del Cliente<br>
-                Dirección<br>
-                Página Web<br>
-                Teléfono
+                <strong>Cliente</strong><br>
+                Nombre: {{ payment.name }}<br>
+                Email: {{ payment.email }}<br>
+                Dirección: {{ payment.address }}<br>
+                Teléfono: {{ payment.phone }}
             </div>
             <div>
                 <strong>Envié A:</strong><br>
-                Nombre de Contacto<br>
-                Dirección<br>
-                Teléfono
+                <!-- Puedes agregar más información aquí si es necesario -->
+                Nombre de Contacto: {{ payment.name }}<br>
+                Dirección: {{ payment.address }}<br><br>
+                Teléfono: {{ payment.phone }}
             </div>
         </div>
 
         <div class="concept">
-            <strong>Concepto</strong><br>
+            <strong>Total</strong><br>
             Pago Parcial / Total<br>
-            Cantidad (Nº y Letras) {{ payment.amount }}
+            ${{ payment.amount }}
         </div>
 
         <div class="signature">
@@ -100,9 +98,8 @@
 </body>
 </html>
 
-
 {% endblock %}
 
 {% block js %}
-
+<!-- Puedes agregar scripts adicionales aquí si es necesario -->
 {% endblock %}

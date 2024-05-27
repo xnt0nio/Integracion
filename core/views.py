@@ -212,6 +212,10 @@ def checkout(request):
     costo_envio = 0
 
     if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        phone = request.POST.get('phone')
         tipo_entrega = request.POST.get('tipo_entrega')
         if tipo_entrega == 'envio':
             costo_envio = 50  # Asigna el costo de envío aquí
@@ -235,7 +239,7 @@ def checkout(request):
                 },
             ],
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success/?session_id={CHECKOUT_SESSION_ID}',
+            success_url=YOUR_DOMAIN + f'/success/?session_id={{CHECKOUT_SESSION_ID}}&name={name}&email={email}&address={address}&phone={phone}',
             cancel_url=YOUR_DOMAIN + '/cancel/',
         )
 
@@ -253,6 +257,11 @@ from decimal import Decimal
 
 def success(request):
     session_id = request.GET.get('session_id')
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    address = request.GET.get('address')
+    phone = request.GET.get('phone')
+
     if session_id is None:
         messages.error(request, "El ID de sesión no se proporcionó.")
         return redirect('checkout')
@@ -264,7 +273,11 @@ def success(request):
     payment = Payment.objects.create(
         user=request.user,
         stripe_charge_id=session.payment_intent,
-        amount=Decimal(amount)
+        amount=Decimal(amount),
+        name=name,
+        email=email,
+        address=address,
+        phone=phone
     )
 
     # Vaciar el carrito del usuario
@@ -397,4 +410,6 @@ def delete(request, id):
 
 
 def historialPagos(request):
-    return render(request, 'core/historialPagos.html')
+    payments = Payment.objects.all()
+    return render(request, 'core/historialPagos.html',{'payments': payments})
+

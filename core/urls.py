@@ -32,7 +32,5 @@ urlpatterns = [
     path('historialPagos/', historialPagos, name='historialPagos'),
     path('success/', success, name='success'),
     path('cancel/', cancel, name='cancel'),
-    path('receipt/<int:payment_id>/', receipt, name='receipt'),
-    
-    
+    path('receipt/<int:payment_id>/', receipt, name='receipt'),   
 ]
