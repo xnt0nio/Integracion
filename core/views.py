@@ -255,6 +255,7 @@ def checkout(request):
     return render(request, 'core/checkout.html', data)
 from decimal import Decimal
 
+
 def success(request):
     session_id = request.GET.get('session_id')
     name = request.GET.get('name')
@@ -270,21 +271,27 @@ def success(request):
     amount = session.amount_total / 100  # Convertir de centavos a dólares
 
     # Guardar los detalles del pago en la base de datos
-    payment = Payment.objects.create(
-        user=request.user,
-        stripe_charge_id=session.payment_intent,
-        amount=Decimal(amount),
-        name=name,
-        email=email,
-        address=address,
-        phone=phone
-    )
+    carrito_items = Carrito.objects.filter(usuario=request.user)
+    for item in carrito_items:
+        Payment.objects.create(
+            user=request.user,
+            stripe_charge_id=session.payment_intent,
+            amount=Decimal(amount),
+            name=name,
+            email=email,
+            address=address,
+            phone=phone,
+            product_name=item.producto.nombre,
+            product_price=item.producto.precio,
+            product_quantity=item.cantidad_agregada,
+            product_image=item.producto.imagen
+        )
 
     # Vaciar el carrito del usuario
     Carrito.objects.filter(usuario=request.user).delete()
 
     # Redirigir a la vista del comprobante
-    return redirect('receipt', payment_id=payment.id)
+    return redirect('receipt', session_id=session_id)
 
 def cancel(request):
     messages.error(request, "El pago ha sido cancelado.")
@@ -410,6 +417,5 @@ def delete(request, id):
 
 
 def historialPagos(request):
-    payments = Payment.objects.all()
-    return render(request, 'core/historialPagos.html',{'payments': payments})
-
+    payments = Payment.objects.filter(user=request.user) 
+    return render(request, 'core/historialPagos.html', {'payments': payments})

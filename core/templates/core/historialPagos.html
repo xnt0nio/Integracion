@@ -1,24 +1,18 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block css %}
-
+<link rel="stylesheet" href="{% static 'path/to/your/css/styles.css' %}">
 {% endblock %}
 {% block contenido %}
 
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Pagos</title>
-    <link rel="stylesheet" href="{% static 'path/to/your/css/styles.css' %}">
 </head>
+
 <body>
     <div class="cart-section mt-150 mb-150">
         <div class="container">
@@ -29,18 +23,29 @@
                         <table class="cart-table">
                             <thead class="cart-table-head">
                                 <tr class="table-head-row">
-                                    
-                                    <th class="product-image">Nombre cliente</th>
-                                    <th class="product-quantity">Total</th>
-                                    
+                                    <th class="product-image">Imagen</th>
+                                    <th class="product-name">Nombre cliente</th>
+                                    <th class="product-quantity">Precio</th>
+                                    <th class="product-quantity">Cantidad</th>
+                                    <th class="product-total">Total</th>
+                                    <th class="product-timestamp">Fecha</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for payment in payments %}
                                 <tr class="table-body-row">
-                            
-                                    <td class="product-name">{{ payment.user.username }}</td>
-                                    <td class="product-total">${{ payment.amount }}</td>                                                       
+                                    <td class="product-image">
+                                        {% if payment.product_image %}
+                                            <img src="{{ payment.product_image.url }}" alt="Imagen del producto" class="img-small">
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                    <td class="product-name">{{ payment.product_name }}</td>
+                                    <td class="product-total">${{ payment.product_price }}</td>
+                                    <td class="product-total">{{ payment.product_quantity }}</td>
+                                    <td class="product-total">${{ payment.amount }}</td>
+                                    <td class="product-timestamp">{{ payment.timestamp }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -51,11 +56,8 @@
         </div>
     </div>
 </body>
+
 </html>
-
-
-
-
 
 {% endblock %}
 {% block js %}
