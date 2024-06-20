@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 class TipoProducto(models.Model):
@@ -18,6 +19,18 @@ class Producto(models.Model):
     imagen = models.ImageField(null=True, blank=True)
     vigente = models.BooleanField()
 
+    def clean(self):
+        if self.precio < 0:
+            raise ValidationError('El precio no puede ser negativo')
+        if self.stock < 0:
+            raise ValidationError('El stock no puede ser negativo')
+        if not self.nombre:
+            raise ValidationError('El nombre no puede estar vacío')
+        if len(self.nombre) > 50:
+            raise ValidationError('El nombre no puede tener más de 50 caracteres')
+        if len(self.descripcion) > 250:
+            raise ValidationError('La descripción no puede tener más de 250 caracteres')
+
     def __str__(self):
         return self.nombre
 
@@ -28,6 +41,10 @@ class Carrito(models.Model):
 
     class Meta:
         db_table = 'db_carrito'
+
+    def clean(self):
+        if self.cantidad_agregada < 0:
+            raise ValidationError('La cantidad agregada no puede ser negativa')
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,6 +61,12 @@ class Payment(models.Model):
     product_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     product_quantity = models.IntegerField(null=True, blank=True)
     product_image = models.ImageField(null=True, blank=True)
+
+    def clean(self):
+        if self.email and '@' not in self.email:
+            raise ValidationError('Email inválido')
+        if self.phone and not self.phone.isdigit():
+            raise ValidationError('Teléfono inválido')
 
     def __str__(self):
         return f'Pago de {self.user.username} por {self.amount} USD'
