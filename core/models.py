@@ -8,6 +8,9 @@ class TipoProducto(models.Model):
 
     def __str__(self):
         return self.descripcion
+    
+
+
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=50)
@@ -20,10 +23,10 @@ class Producto(models.Model):
     vigente = models.BooleanField()
 
     def clean(self):
-        if self.precio < 0:
-            raise ValidationError('El precio no puede ser negativo')
-        if self.stock < 0:
-            raise ValidationError('El stock no puede ser negativo')
+        if self.precio is None or self.precio < 0:
+            raise ValidationError('El precio no puede ser negativo o nulo')
+        if self.stock is None or self.stock < 0:
+            raise ValidationError('El stock no puede ser negativo o nulo')
         if not self.nombre:
             raise ValidationError('El nombre no puede estar vacío')
         if len(self.nombre) > 50:
@@ -33,6 +36,7 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
+
 
 class Carrito(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, default=None)

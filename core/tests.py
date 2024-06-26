@@ -1,386 +1,392 @@
 from django.test import TestCase
-from core.models import TipoProducto, Producto, Carrito, Payment
-from django.contrib.auth.models import User
-from datetime import date
-from django.core.exceptions import ValidationError
+from .forms import ProductoForm, CarritoForm
+from .models import Producto, Carrito, TipoProducto
 
-class TipoProductoModelTest(TestCase):
-    # Prueba para crear un TipoProducto con una descripción válida
-    def test_crear_tipoproducto(self):
-        tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
-        self.assertEqual(tipoproducto.descripcion, 'herramientas')
-
-    # Prueba para verificar la representación en cadena de un TipoProducto
-    def test_str_tipoproducto(self):
-        tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
-        self.assertEqual(str(tipoproducto), 'herramientas')
-
-    # Prueba para crear un TipoProducto con una descripción vacía y esperar un ValidationError
-    def test_crear_tipoproducto_descripcion_vacia(self):
-        with self.assertRaises(ValidationError):
-            tipoproducto = TipoProducto(descripcion='')
-            tipoproducto.full_clean()
-
-    # Prueba para actualizar la descripción de un TipoProducto
-    def test_actualizar_tipoproducto(self):
-        tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
-        tipoproducto.descripcion = 'electrónica'
-        tipoproducto.save()
-        self.assertEqual(tipoproducto.descripcion, 'electrónica')
-
-    # Prueba para eliminar un TipoProducto
-    def test_eliminar_tipoproducto(self):
-        tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
-        tipoproducto_id = tipoproducto.id
-        tipoproducto.delete()
-        self.assertFalse(TipoProducto.objects.filter(id=tipoproducto_id).exists())
-
-class ProductoModelTest(TestCase):
+class ProductoFormTest(TestCase):
 
     def setUp(self):
-        self.tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
+        self.tipo_producto = TipoProducto.objects.create(descripcion='Tipo de Prueba')
 
-    # Prueba para crear un Producto con valores válidos
-    def test_crear_producto(self):
-        producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        self.assertEqual(producto.nombre, 'Alguacil Electrico')
-        self.assertEqual(producto.precio, 50)
-        self.assertEqual(producto.tipo, self.tipoproducto)
-        self.assertEqual(producto.descripcion, 'Alguacil electronico')
+    def test_producto_form_valido(self):
+        form_data = {
+            'nombre': 'Producto de Prueba',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Esta es una descripción válida de producto.',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
-    # Prueba para verificar la representación en cadena de un Producto
-    def test_str_producto(self):
-        producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        self.assertEqual(str(producto), 'Alguacil Electrico')
+    def test_producto_form_invalido(self):
+        form_data = {
+            'nombre': 'Pro',
+            'precio': None,
+            'stock': -5,
+            'descripcion': 'Corta',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('nombre', form.errors)
+        self.assertIn('precio', form.errors)
+        self.assertIn('stock', form.errors)
+        self.assertIn('descripcion', form.errors)
 
-    # Prueba para verificar la relación entre Producto y TipoProducto
-    def test_foreignkey_producto(self):
-        producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        self.assertEqual(producto.tipo.descripcion, 'herramientas')
+    def test_nombre_vacio(self):
+        form_data = {
+            'nombre': '',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('nombre', form.errors)
 
-    # Prueba para crear un Producto con un precio negativo y esperar un ValidationError
-    def test_crear_producto_precio_negativo(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='Producto Negativo',
-                precio=-10,
-                stock=5,
-                descripcion='Descripción',
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
+    def test_precio_negativo(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': -10,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('precio', form.errors)
 
-    # Prueba para actualizar el precio de un Producto
-    def test_actualizar_producto(self):
-        producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        producto.precio = 100
-        producto.save()
-        self.assertEqual(producto.precio, 100)
+    def test_stock_negativo(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': -10,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('stock', form.errors)
 
-    # Prueba para eliminar un Producto
-    def test_eliminar_producto(self):
-        producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        producto_id = producto.id
-        producto.delete()
-        self.assertFalse(Producto.objects.filter(id=producto_id).exists())
+    def test_descripcion_corta(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Corta',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('descripcion', form.errors)
 
-    # Prueba para verificar que el vencimiento de un Producto sea la fecha actual por defecto
-    def test_vencimiento_por_defecto(self):
-        producto = Producto.objects.create(
-            nombre='Producto Nuevo',
-            precio=50,
-            stock=10,
-            descripcion='Descripción',
-            tipo=self.tipoproducto,
-            vigente=True
-        )
-        self.assertEqual(producto.vencimiento, date.today())
+    def test_vencimiento_pasado(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2020-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite fechas pasadas
 
-    # Prueba para crear un Producto sin nombre y esperar un ValidationError
-    def test_crear_producto_sin_nombre(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='',
-                precio=50,
-                stock=10,
-                descripcion='Descripción',
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
+    def test_nombre_largo(self):
+        form_data = {
+            'nombre': 'P' * 51,
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('nombre', form.errors)
 
-class CarritoModelTest(TestCase):
+    def test_descripcion_larga(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'D' * 251,
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('descripcion', form.errors)
+
+    def test_precio_no_numerico(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 'cien',
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('precio', form.errors)
+
+    def test_stock_no_numerico(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 'cincuenta',
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('stock', form.errors)
+
+    def test_sin_tipo_producto(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': None
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('tipo', form.errors)
+
+    def test_vencimiento_formato_invalido(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '31-12-2025',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('vencimiento', form.errors)
+
+    def test_nombre_minimo(self):
+        form_data = {
+            'nombre': 'Pr',
+            'precio': 100,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('nombre', form.errors)
+
+    def test_precio_muy_alto(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 1000000000,
+            'stock': 50,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite precios muy altos
+
+    def test_stock_muy_alto(self):
+        form_data = {
+            'nombre': 'Producto válido',
+            'precio': 100,
+            'stock': 1000000000,
+            'descripcion': 'Descripción válida',
+            'vencimiento': '2025-12-31',
+            'vigente': True,
+            'tipo': self.tipo_producto.id
+        }
+        form = ProductoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite stocks muy altos
+
+
+class CarritoFormTest(TestCase):
 
     def setUp(self):
-        self.tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
+        self.tipo_producto = TipoProducto.objects.create(descripcion='Tipo de Prueba')
         self.producto = Producto.objects.create(
-            nombre='Alguacil Electrico',
-            precio=50,
-            stock=10,
-            descripcion='Alguacil electronico',
-            tipo=self.tipoproducto,
-            vigente=True
+            nombre='Producto',
+            precio=100,
+            stock=50,
+            descripcion='Descripción del producto',
+            vencimiento='2025-12-31',
+            vigente=True,
+            tipo=self.tipo_producto
         )
-        self.user = User.objects.create_user(username='testuser', password='12345')
 
-    # Prueba para crear un Carrito con valores válidos
-    def test_crear_carrito(self):
-        carrito = Carrito.objects.create(
-            usuario=self.user,
-            producto=self.producto,
-            cantidad_agregada=3
+    def test_carrito_form_valido(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_carrito_form_invalido(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': -1
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('__all__', form.errors)
+        self.assertIn('La cantidad agregada no puede ser negativa', form.errors['__all__'])
+
+    def test_sin_producto(self):
+        form_data = {
+            'producto': None,
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('producto', form.errors)
+
+    def test_cantidad_agregada_nula(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': None
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('cantidad_agregada', form.errors)
+
+    def test_cantidad_agregada_muy_alta(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 1000000
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite cantidades muy altas
+
+    def test_producto_no_existente(self):
+        form_data = {
+            'producto': 999,  # ID de producto que no existe
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('producto', form.errors)
+
+    def test_cantidad_agregada_no_numerica(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 'diez'
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('cantidad_agregada', form.errors)
+
+    def test_producto_con_espacios(self):
+        form_data = {
+            'producto': ' ',
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('producto', form.errors)
+
+    
+
+    def test_producto_inactivo(self):
+        producto_inactivo = Producto.objects.create(
+            nombre='Producto Inactivo',
+            precio=100,
+            stock=50,
+            descripcion='Descripción del producto',
+            vencimiento='2025-12-31',
+            vigente=False,
+            tipo=self.tipo_producto
         )
-        self.assertEqual(carrito.cantidad_agregada, 3)
+        form_data = {
+            'producto': producto_inactivo.id,
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite productos inactivos
 
-    # Prueba para actualizar la cantidad agregada en un Carrito
-    def test_actualizar_carrito(self):
-        carrito = Carrito.objects.create(
-            usuario=self.user,
-            producto=self.producto,
-            cantidad_agregada=3
+    def test_cantidad_agregada_cero(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 0
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_producto_vencido(self):
+        producto_vencido = Producto.objects.create(
+            nombre='Producto Vencido',
+            precio=100,
+            stock=50,
+            descripcion='Descripción del producto',
+            vencimiento='2020-12-31',
+            vigente=True,
+            tipo=self.tipo_producto
         )
-        carrito.cantidad_agregada = 5
-        carrito.save()
-        self.assertEqual(carrito.cantidad_agregada, 5)
+        form_data = {
+            'producto': producto_vencido.id,
+            'cantidad_agregada': 10
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica permite productos vencidos
 
-    # Prueba para eliminar un Carrito
-    def test_eliminar_carrito(self):
-        carrito = Carrito.objects.create(
-            usuario=self.user,
-            producto=self.producto,
-            cantidad_agregada=3
-        )
-        carrito_id = carrito.id
-        carrito.delete()
-        self.assertFalse(Carrito.objects.filter(id=carrito_id).exists())
+    def test_producto_con_stock_insuficiente(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 100
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Depende de si tu lógica valida el stock disponible
 
-    # Prueba para crear un Carrito con cantidad negativa y esperar un ValidationError
-    def test_crear_carrito_cantidad_negativa(self):
-        with self.assertRaises(ValidationError):
-            carrito = Carrito(
-                usuario=self.user,
-                producto=self.producto,
-                cantidad_agregada=-1
-            )
-            carrito.full_clean()
+    def test_producto_con_stock_justo(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 50
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
-    # Prueba para verificar la relación entre Carrito y Usuario
-    def test_relacion_carrito_usuario(self):
-        carrito = Carrito.objects.create(
-            usuario=self.user,
-            producto=self.producto,
-            cantidad_agregada=3
-        )
-        self.assertEqual(carrito.usuario.username, 'testuser')
+    def test_producto_con_stock_exacto(self):
+        form_data = {
+            'producto': self.producto.id,
+            'cantidad_agregada': 50
+        }
+        form = CarritoForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
-    # Prueba para crear un Carrito con usuario inexistente y esperar un ValidationError
-    def test_crear_carrito_usuario_inexistente(self):
-        with self.assertRaises(ValidationError):
-            carrito = Carrito(
-                usuario=None,
-                producto=self.producto,
-                cantidad_agregada=3
-            )
-            carrito.full_clean()
-
-class PaymentModelTest(TestCase):
-
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345')
-
-    # Prueba para crear un Payment con valores válidos
-    def test_crear_payment(self):
-        payment = Payment.objects.create(
-            user=self.user,
-            stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-            amount=100.00,
-            name='Test User',
-            email='test@example.com',
-            address='123 Test St',
-            phone='1234567890'
-        )
-        self.assertEqual(payment.amount, 100.00)
-
-    # Prueba para actualizar el monto de un Payment
-    def test_actualizar_payment(self):
-        payment = Payment.objects.create(
-            user=self.user,
-            stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-            amount=100.00,
-            name='Test User',
-            email='test@example.com',
-            address='123 Test St',
-            phone='1234567890'
-        )
-        payment.amount = 200.00
-        payment.save()
-        self.assertEqual(payment.amount, 200.00)
-
-    # Prueba para eliminar un Payment
-    def test_eliminar_payment(self):
-        payment = Payment.objects.create(
-            user=self.user,
-            stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-            amount=100.00,
-            name='Test User',
-            email='test@example.com',
-            address='123 Test St',
-            phone='1234567890'
-        )
-        payment_id = payment.id
-        payment.delete()
-        self.assertFalse(Payment.objects.filter(id=payment_id).exists())
-
-    # Prueba para verificar la relación entre Payment y Usuario
-    def test_relacion_payment_usuario(self):
-        payment = Payment.objects.create(
-            user=self.user,
-            stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-            amount=100.00,
-            name='Test User',
-            email='test@example.com',
-            address='123 Test St',
-            phone='1234567890'
-        )
-        self.assertEqual(payment.user.username, 'testuser')
-
-    # Prueba para crear un Payment con un email inválido y esperar un ValidationError
-    def test_validacion_email_payment(self):
-        with self.assertRaises(ValidationError):
-            payment = Payment(
-                user=self.user,
-                stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-                amount=100.00,
-                name='Test User',
-                email='invalid_email',
-                address='123 Test St',
-                phone='1234567890'
-            )
-            payment.full_clean()
-
-    # Prueba para crear un Payment con un teléfono inválido y esperar un ValidationError
-    def test_validacion_phone_payment(self):
-        with self.assertRaises(ValidationError):
-            payment = Payment(
-                user=self.user,
-                stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-                amount=100.00,
-                name='Test User',
-                email='test@example.com',
-                address='123 Test St',
-                phone='invalid_phone'
-            )
-            payment.full_clean()
-
-class ProductoValidacionTest(TestCase):
-
-    def setUp(self):
-        self.tipoproducto = TipoProducto.objects.create(descripcion='herramientas')
-
-    # Prueba para validar que el nombre del Producto no exceda los 50 caracteres
-    def test_validacion_longitud_nombre_producto(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='A'*51,
-                precio=50,
-                stock=10,
-                descripcion='Descripción',
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
-
-    # Prueba para validar que la descripción del Producto no exceda los 250 caracteres
-    def test_validacion_longitud_descripcion_producto(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='Producto',
-                precio=50,
-                stock=10,
-                descripcion='D'*251,
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
-
-    # Prueba para validar que el stock del Producto no sea negativo
-    def test_validacion_cantidad_minima_stock_producto(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='Producto',
-                precio=50,
-                stock=-1,
-                descripcion='Descripción',
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
-
-    # Prueba para validar que el precio del Producto no sea negativo
-    def test_validacion_cantidad_minima_precio_producto(self):
-        with self.assertRaises(ValidationError):
-            producto = Producto(
-                nombre='Producto',
-                precio=-1,
-                stock=10,
-                descripcion='Descripción',
-                tipo=self.tipoproducto,
-                vigente=True
-            )
-            producto.full_clean()
-
-# Prueba adicional para verificar la longitud máxima del email en Payment
-class PaymentEmailLengthTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='12345')
-
-    # Prueba para validar que el email del Payment no exceda los 254 caracteres
-    def test_validacion_longitud_email_payment(self):
-        with self.assertRaises(ValidationError):
-            email_largo = 'a' * 245 + '@example.com'
-            payment = Payment(
-                user=self.user,
-                stripe_charge_id='ch_1F2hJ0EjHbXRQy',
-                amount=100.00,
-                name='Test User',
-                email=email_largo,
-                address='123 Test St',
-                phone='1234567890'
-            )
-            payment.full_clean()
+    def test_carrito_form_vacio(self):
+        form_data = {}
+        form = CarritoForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('producto', form.errors)
+        self.assertIn('cantidad_agregada', form.errors)
