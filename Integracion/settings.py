@@ -145,6 +145,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_Dt4ZBItXSZT1EzmOd8yCxonL'
 STRIPE_SECRET_KEY = 'sk_test_CGGvfNiIPwLXiDwaOfZ3oX6Y'
