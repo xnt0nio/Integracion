@@ -255,7 +255,8 @@ def checkout(request):
     return render(request, 'core/checkout.html', data)
 from decimal import Decimal
 
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def success(request):
     session_id = request.GET.get('session_id')
     name = request.GET.get('name')
@@ -272,8 +273,9 @@ def success(request):
 
     # Guardar los detalles del pago en la base de datos
     carrito_items = Carrito.objects.filter(usuario=request.user)
+    payment = None
     for item in carrito_items:
-        Payment.objects.create(
+        payment = Payment.objects.create(
             user=request.user,
             stripe_charge_id=session.payment_intent,
             amount=Decimal(amount),
@@ -291,7 +293,7 @@ def success(request):
     Carrito.objects.filter(usuario=request.user).delete()
 
     # Redirigir a la vista del comprobante
-    return redirect('receipt', session_id=session_id)
+    return redirect('receipt', payment_id=payment.id)
 
 def cancel(request):
     messages.error(request, "El pago ha sido cancelado.")
@@ -373,8 +375,7 @@ def registro(request):
             user = formulario.save(commit=False)
             user.set_password(password)  # Establecer la contraseña generada
             user.save()
-            grupo = Group.objects.get(name="cliente")
-            user.groups.add(grupo)
+
             user = authenticate(username=formulario.cleaned_data["username"], password=password)
             login(request, user)
             messages.success(request, "Te has registrado correctamente")
